@@ -2,3 +2,4 @@
 /db/
 .replxx_history
 build/
+env.cfg
