@@ -1,5 +1,6 @@
 SRC =	./data/resources/[local]/test-mongo	\
 		./data/resources/[local]/test-redis	\
+		./data/resources/[local]/test-script	\
 
 all:
 	@FAILED=0; \
