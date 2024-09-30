@@ -7414,7 +7414,7 @@ declare function N_0x1072f115dab0717e(p0: boolean, p1: boolean): void;
  * @param textureName A texture name in `textureDict` to draw the marker with, or NULL. Example: 'PuttingMarker'
  * @param drawOnEnts Whether or not the marker should draw on intersecting entities.
  */
-declare function DrawMarker(_type: number, posX: number, posY: number, posZ: number, dirX: number, dirY: number, dirZ: number, rotX: number, rotY: number, rotZ: number, scaleX: number, scaleY: number, scaleZ: number, red: number, green: number, blue: number, alpha: number, bobUpAndDown: boolean, faceCamera: boolean, p19: number, rotate: boolean, textureDict: string, textureName: string, drawOnEnts: boolean): void;
+declare function DrawMarker(_type: number, posX: number, posY: number, posZ: number, dirX: number, dirY: number, dirZ: number, rotX: number, rotY: number, rotZ: number, scaleX: number, scaleY: number, scaleZ: number, red: number, green: number, blue: number, alpha: number, bobUpAndDown: boolean, faceCamera: boolean, p19: number, rotate: boolean, textureDict: string | null, textureName: string | null, drawOnEnts: boolean): void;
 
 /**
  * NativeDB Added Parameter 26: BOOL p25
@@ -11290,7 +11290,7 @@ declare function GetEntityCollisonDisabled(entity: number): boolean;
  * @param alive Unused by the game, potentially used by debug builds of GTA in order to assert whether or not an entity was alive.
  * @return The current entity coordinates.
  */
-declare function GetEntityCoords(entity: number, alive: boolean): number[];
+declare function GetEntityCoords(entity: number, alive: boolean): [number, number, number];
 
 /**
  * Gets the entity's forward vector.
