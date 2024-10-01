@@ -1,0 +1,25 @@
+services:
+  fxserver:
+    build: .
+    ports:
+      - 30120:30120/tcp
+      - 30120:30120/udp
+    networks:
+      - mongo
+    restart: on-failure
+
+  mongo:
+    image: mongo:8
+    ports:
+      - 127.0.0.1:27017:27017
+    networks:
+      - mongo
+    volumes:
+      - mongo:/data/db
+    restart: on-failure
+
+networks:
+  mongo: null
+
+volumes:
+  mongo: null
