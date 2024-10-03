@@ -13,6 +13,7 @@ RUN tar -xf /app/server/fx.tar.xz -C /app/server && \
 COPY Makefile /app/Makefile
 COPY ./data/ /app/data/
 
+RUN (cd /app/data && ./create_resources_config.sh)
 RUN make re_prod
 
 WORKDIR /app/data
