@@ -21,10 +21,5 @@ export function isObjectId(id: Parameters<typeof mongoose.Types.ObjectId.isValid
 }
 
 export type Coords = [number, number, number]; // x, y, z
-export type Position = {
-    x: number;
-    y: number;
-    z: number;
-    heading: number;
-};
+export type Position = { x: number; y: number; z: number; heading: number };
 export type Color = [number, number, number, number]; // r, g, b, a
