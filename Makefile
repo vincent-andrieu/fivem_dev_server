@@ -1,4 +1,5 @@
-SRC =	./data/resources/\[scripts\]/player-spawn	\
+SRC =	./data/core									\
+		./data/resources/\[scripts\]/player-spawn	\
 
 all:
 	@FAILED=0; \
