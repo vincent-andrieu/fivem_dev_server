@@ -13,11 +13,7 @@ export default {
         resolve(), // Allows Rollup to resolve modules
         commonjs(), // Converts CommonJS modules to ES6
         typescript({
-            tsconfigOverride: {
-                rootDir: "client/src/",
-                baseUrl: "client/src/",
-                include: ["client/src/"]
-            }
+            tsconfig: "client/tsconfig.json"
         })
     ]
 };

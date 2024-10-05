@@ -1,6 +1,6 @@
-SRC =	./data/resources/scripts/test-mongo		\
-		./data/resources/scripts/test-redis		\
-		./data/resources/scripts/test-script	\
+SRC =	./data/resources/\[scripts\]/player-spawn	\
+		./data/resources/\[scripts\]/test-redis		\
+		./data/resources/\[scripts\]/test-script	\
 
 all:
 	@FAILED=0; \

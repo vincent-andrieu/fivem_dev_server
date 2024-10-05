@@ -14,12 +14,7 @@ export async function initMongo(): Promise<void> {
         throw new Error("Database connection failed");
     }
     console.info(
-        "Mongo successfully connected : \n\t- Address : " +
-            mongoose.connection.host +
-            "\n\t- Port : " +
-            mongoose.connection.port +
-            "\n\t- Name : " +
-            mongoose.connection.name
+        "Mongo successfully connected : \n\t- Address : " + mongoose.connection.host + "\n\t- Port : " + mongoose.connection.port + "\n\t- Name : " + mongoose.connection.name
     );
 }
 

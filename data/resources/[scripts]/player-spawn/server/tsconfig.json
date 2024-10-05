@@ -1,0 +1,13 @@
+{
+    "extends": "../tsconfig",
+    "compilerOptions": {
+        "baseUrl": ".",
+        "rootDir": "src/",
+        "types": [
+            "../node_modules/@citizenfx/server/index"
+        ]
+    },
+    "include": [
+        "./src/"
+    ]
+}

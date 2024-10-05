@@ -1,7 +1,7 @@
 #!/bin/bash
 
 output_file="resources.cfg"
-ignore_folders=("dependencies" "local")
+ignore_folders=("[dependencies]" "[local]")
 
 > "$output_file"  # Clear the output file
 

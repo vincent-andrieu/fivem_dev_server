@@ -7,7 +7,6 @@ import { Color, Coords } from "./types";
 const POS_COORDS: Coords = [0, 0, 70];
 const POS_SIZE = 5;
 
-// @ts-expect-error setTick is a runtime function
 setTick(() => {
     const playerPed = PlayerPedId();
 
