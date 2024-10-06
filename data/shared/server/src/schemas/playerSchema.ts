@@ -9,6 +9,13 @@ const playersSchema = new mongoose.Schema<Player>(
             y: { type: Number, required: true },
             z: { type: Number, required: true },
             heading: { type: Number, required: true }
+        },
+        identifiers: {
+            license: { type: String, required: true, unique: true },
+            discord: { type: String, required: true, unique: true },
+            fivem: { type: String, unique: true },
+            license2: { type: String, required: true, unique: true },
+            ip: { type: String, required: true, unique: true }
         }
     },
     {

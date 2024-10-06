@@ -10,8 +10,8 @@
         "skipLibCheck": true /* Skip type checking of declaration files. */,
         "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */,
         "paths": {
-            "@shared/core": ["../../../../shared/core"],
-            "@shared/server": ["../../../../shared/server"],
+            "@shared/core": ["../../../../shared/core/build"],
+            "@shared/server": ["../../../../shared/server/build"],
         }
     }
 }
