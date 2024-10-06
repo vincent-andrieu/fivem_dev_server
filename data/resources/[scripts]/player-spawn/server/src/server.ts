@@ -29,7 +29,7 @@ async function upsertPlayer(source: string): Promise<Player> {
 
             return await playersModel.add(
                 new Player({
-                    position: { x: 0, y: 0, z: 0, heading: 0 },
+                    position: { x: 0, y: 0, z: 75, heading: 0 },
                     identifiers: identifiers as PlayerIdentifiers
                 })
             );
