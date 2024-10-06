@@ -1,7 +1,7 @@
 import Player, { PlayerIdentifiers } from "./interfaces/player";
 import TemplateObject, { NonTemplateObjectFunctions } from "./interfaces/templateObject";
-import { Color, Coords, ObjectId, Position, isObjectId, toObjectId } from "./utils";
+import { Color, Coords, Position } from "./utils";
 
-export { Player, TemplateObject, isObjectId, toObjectId };
+export { Player, TemplateObject };
 
-export type { Color, Coords, NonTemplateObjectFunctions, ObjectId, PlayerIdentifiers, Position };
+export type { Color, Coords, NonTemplateObjectFunctions, PlayerIdentifiers, Position };

@@ -7,13 +7,15 @@ async function main() {
     await initMongo();
 }
 
-on("playerJoining", (source: string, _oldID: string) => {
-    const player = upsertPlayer(source);
+on("playerJoining", async (source: string, _oldID: string) => {
+    const player = await upsertPlayer(source);
+
+    emitNet("player-spawn:init", source, player);
 });
 
-async function upsertPlayer(source: string) {
+async function upsertPlayer(source: string): Promise<Player> {
     try {
-        return playersModel.getPlayerBySource(source);
+        return await playersModel.getPlayerBySource(source);
     } catch (error) {
         if (typeof error === "string") {
             const identifiersList = getPlayerIdentifiers(source);
@@ -25,13 +27,14 @@ async function upsertPlayer(source: string) {
                 identifiers[type] = identifier;
             });
 
-            await playersModel.add(
+            return await playersModel.add(
                 new Player({
                     position: { x: 0, y: 0, z: 0, heading: 0 },
                     identifiers: identifiers as PlayerIdentifiers
                 })
             );
         }
+        throw error;
     }
 }
 
