@@ -10,7 +10,8 @@ export async function initMongo(): Promise<void> {
     try {
         console.log("Connecting to database...");
         await mongoose.connect(url);
-    } catch {
+    } catch (error) {
+        console.error(error);
         throw new Error("Database connection failed");
     }
     console.info(

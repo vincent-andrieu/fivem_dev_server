@@ -1,4 +1,5 @@
-SRC =	./data/core									\
+SRC =	./data/shared/core							\
+		./data/shared/server						\
 		./data/resources/\[scripts\]/player-spawn	\
 
 all:

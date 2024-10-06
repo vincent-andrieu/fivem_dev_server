@@ -3,8 +3,9 @@
     "compilerOptions": {
         "baseUrl": ".",
         "rootDir": "src/",
-        "types": [
-            "../node_modules/@citizenfx/server/index"
+        "typeRoots": [
+            "../node_modules/@types",
+            "../node_modules/@citizenfx"
         ]
     },
     "include": [

@@ -1,9 +1,9 @@
 {
-    "name": "core",
+    "name": "@shared/core",
     "version": "1.0.0",
-    "main": "build/index.js",
     "author": "Vincent Andrieu",
     "license": "UNLICENSED",
+    "main": "build/index.js",
     "type": "module",
     "scripts": {
         "build": "tsc",

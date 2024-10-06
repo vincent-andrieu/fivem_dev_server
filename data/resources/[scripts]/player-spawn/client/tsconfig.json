@@ -3,9 +3,10 @@
     "compilerOptions": {
         "baseUrl": ".",
         "rootDir": "src/",
-        "types": [
-            "../../../../types/natives_universal",
-            "../node_modules/@citizenfx/client/index"
+        "typeRoots": [
+            "../node_modules/@types",
+            "../node_modules/@citizenfx",
+            "../../../../types"
         ]
     },
     "include": [
