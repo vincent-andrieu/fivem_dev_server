@@ -23,6 +23,7 @@
     "dependencies": {
         "@citizenfx/server": "^2.0.10048-1",
         "@shared/core": "file:../core",
-        "mongoose": "^8.7.0"
+        "mongoose": "^8.7.0",
+        "redis": "^4.7.0"
     }
 }
