@@ -1,5 +1,5 @@
 {
-    "name": "test-mongo",
+    "name": "player-spawn",
     "version": "1.0.0",
     "license": "UNLICENSED",
     "type": "module",
@@ -29,7 +29,6 @@
         "@shared/core": "file:../../../shared/core",
         "@shared/server": "file:../../../shared/server",
         "@citizenfx/client": "^2.0.10048-1",
-        "@citizenfx/server": "^2.0.10048-1",
-        "mongoose": "^8.7.0"
+        "@citizenfx/server": "^2.0.10048-1"
     }
 }
