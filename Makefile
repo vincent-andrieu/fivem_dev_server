@@ -1,6 +1,7 @@
-SRC =	./data/shared/core							\
-		./data/shared/server						\
-		./data/resources/\[scripts\]/player-spawn	\
+SRC =	./data/shared/core									\
+		./data/shared/server								\
+		./data/resources/\[scripts\]/player-spawn			\
+		./data/resources/\[scripts\]/players-map-history	\
 
 all:
 	@FAILED=0; \
