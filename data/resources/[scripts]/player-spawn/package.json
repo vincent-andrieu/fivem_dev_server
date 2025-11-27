@@ -7,19 +7,12 @@
         "start:server": "node ./build/server/server.js",
         "client": "rollup -c client/rollup.config.js",
         "server": "rollup -c server/rollup.config.js",
-        "build": "npm run client && npm run server",
-        "lint": "eslint ./client ./server --max-warnings=0 && tsc --noEmit",
-        "lint:fix": "eslint ./client ./server --max-warnings=0 --fix && tsc --noEmit"
+        "build": "npm run client && npm run server"
     },
     "devDependencies": {
         "@rollup/plugin-commonjs": "^28.0.0",
         "@rollup/plugin-node-resolve": "^15.3.0",
         "@types/node": "^22.7.4",
-        "@typescript-eslint/eslint-plugin": "^8.7.0",
-        "@typescript-eslint/parser": "^8.7.0",
-        "eslint": "^9.11.1",
-        "eslint-config-prettier": "^9.1.0",
-        "eslint-plugin-prettier": "^5.2.1",
         "prettier": "^3.3.3",
         "rollup": "^4.22.5",
         "rollup-plugin-typescript2": "^0.36.0",
