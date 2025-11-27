@@ -8,7 +8,7 @@ export default {
         file: "build/server/server.js", // The output bundled file
         format: "commonjs" // The output format ('module', 'commonjs', 'iife', 'umd', 'amd', 'system')
     },
-    external: ["mongoose"],
+    external: ["mongoose", "redis"],
     plugins: [
         resolve(), // Allows Rollup to resolve modules
         commonjs(), // Converts CommonJS modules to ES6
