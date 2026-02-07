@@ -17,7 +17,7 @@
             "node_modules/@citizenfx"
         ],
         "paths": {
-            "@shared/core": ["../core/build"]
+            "@shared/core": ["node_modules/@shared/core/build"]
         }
     },
     "include": ["src/"]

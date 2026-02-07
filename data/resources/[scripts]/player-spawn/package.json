@@ -7,7 +7,7 @@
         "start:server": "node ./build/server/server.js",
         "client": "rollup -c client/rollup.config.js",
         "server": "rollup -c server/rollup.config.js",
-        "build": "npm run client && npm run server"
+        "build": "pnpm run client && pnpm run server"
     },
     "devDependencies": {
         "@rollup/plugin-commonjs": "^29.0.0",
@@ -19,11 +19,11 @@
         "typescript": "^5.9.3"
     },
     "dependencies": {
-        "@shared/core": "file:../../../shared/core",
-        "@shared/server": "file:../../../shared/server",
+        "@shared/core": "workspace:*",
+        "@shared/server": "workspace:*",
         "@citizenfx/client": "^2.0.22819-1",
         "@citizenfx/server": "^2.0.22819-1",
-        "mongoose": "^8.20.1",
+        "mongoose": "^9.1.6",
         "redis": "^5.10.0"
     }
 }

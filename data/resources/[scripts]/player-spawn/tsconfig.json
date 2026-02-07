@@ -9,9 +9,10 @@
         "esModuleInterop": true /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */,
         "skipLibCheck": true /* Skip type checking of declaration files. */,
         "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */,
+        "baseUrl": ".",
         "paths": {
-            "@shared/core": ["../../../../shared/core/build"],
-            "@shared/server": ["../../../../shared/server/build"],
+            "@shared/core": ["node_modules/@shared/core/build"],
+            "@shared/server": ["node_modules/@shared/server/build"]
         }
     }
 }

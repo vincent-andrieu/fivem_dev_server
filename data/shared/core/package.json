@@ -1,7 +1,7 @@
 {
     "name": "@shared/core",
     "version": "1.0.0",
-    "author": "Vincent Andrieu",
+    "author": "gassastsina",
     "license": "UNLICENSED",
     "main": "build/index.js",
     "type": "module",

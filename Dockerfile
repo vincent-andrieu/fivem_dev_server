@@ -2,7 +2,8 @@ FROM node:20-slim
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y xz-utils make
+RUN apt-get update && apt-get install -y xz-utils make && \
+    npm install -g pnpm
 
 # FiveM Version: 7290
 ADD https://runtime.fivem.net/artifacts/fivem/build_proot_linux/master/7290-a654bcc2adfa27c4e020fc915a1a6343c3b4f921/fx.tar.xz /app/server/fx.tar.xz

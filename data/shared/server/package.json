@@ -1,7 +1,7 @@
 {
-    "name": "@shared/core",
+    "name": "@shared/server",
     "version": "1.0.0",
-    "author": "Vincent Andrieu",
+    "author": "gassastsina",
     "license": "UNLICENSED",
     "main": "build/index.js",
     "type": "module",
@@ -15,8 +15,8 @@
     },
     "dependencies": {
         "@citizenfx/server": "^2.0.22819-1",
-        "@shared/core": "file:../core",
-        "mongoose": "^9.0.0",
+        "@shared/core": "workspace:*",
+        "mongoose": "^9.1.6",
         "redis": "^5.10.0"
     }
 }

@@ -1,41 +1,23 @@
-SRC =	./data/shared/core							\
-		./data/shared/server						\
-		./data/resources/\[scripts\]/player-spawn	\
+WORKSPACE = ./data
 
 all:
-	@FAILED=0; \
-	for dir in $(SRC); do \
-		$(ECHO) $(BOLD) $(CYAN)"[Building] $$dir" $(DEFAULT); \
-		npm run build -s --prefix $$dir && $(ECHO) $(BOLD) $(WHITE) $$dir $(GREEN)"[OK]"$(DEFAULT) || { $(ECHO) $(BOLD) $(WHITE) $$dir $(RED)"[KO]"$(DEFAULT); FAILED=1; }; \
-	done; \
-	if [ $$FAILED -eq 1 ]; then exit 1; fi
+	@$(ECHO) $(BOLD) $(CYAN)"[Building all packages]" $(DEFAULT)
+	@cd $(WORKSPACE) && pnpm -r build && $(ECHO) $(BOLD) $(GREEN)"[Build complete]"$(DEFAULT) || $(ECHO) $(BOLD) $(RED)"[Build failed]"$(DEFAULT)
 
 install:
-	@FAILED=0; \
-	for dir in $(SRC); do \
-		$(ECHO) $(BOLD) $(CYAN)"[Installing development environment] $$dir" $(DEFAULT); \
-		npm i --prefix $$dir && $(ECHO) $(BOLD) $(WHITE) $$dir $(GREEN)"[OK]"$(DEFAULT) || { $(ECHO) $(BOLD) $(WHITE) $$dir $(RED)"[KO]"$(DEFAULT); FAILED=1; }; \
-	done; \
-	if [ $$FAILED -eq 1 ]; then exit 1; fi
+	@$(ECHO) $(BOLD) $(CYAN)"[Installing development environment]" $(DEFAULT)
+	@cd $(WORKSPACE) && pnpm install && $(ECHO) $(BOLD) $(GREEN)"[Install complete]"$(DEFAULT) || $(ECHO) $(BOLD) $(RED)"[Install failed]"$(DEFAULT)
 
 install_prod:
-	@FAILED=0; \
-	for dir in $(SRC); do \
-		$(ECHO) $(BOLD) $(CYAN)"[Installing production environment] $$dir" $(DEFAULT); \
-		npm ci --production --prefix $$dir && $(ECHO) $(BOLD) $(WHITE) $$dir $(GREEN)"[OK]"$(DEFAULT) || { $(ECHO) $(BOLD) $(WHITE) $$dir $(RED)"[KO]"$(DEFAULT); FAILED=1; }; \
-	done; \
-	if [ $$FAILED -eq 1 ]; then exit 1; fi
+	@$(ECHO) $(BOLD) $(CYAN)"[Installing production environment]" $(DEFAULT)
+	@cd $(WORKSPACE) && pnpm install --prod && $(ECHO) $(BOLD) $(GREEN)"[Install complete]"$(DEFAULT) || $(ECHO) $(BOLD) $(RED)"[Install failed]"$(DEFAULT)
 
 clean:
-	@FAILED=0; \
-	for dir in $(SRC); do \
-		$(ECHO) $(BOLD) $(CYAN)"[Cleaning] $$dir" $(DEFAULT); \
-		rm -rf $$dir/build/ $$dir/node_modules/ && $(ECHO) $(BOLD) $(WHITE) $$dir $(GREEN)"[OK]"$(DEFAULT) || { $(ECHO) $(BOLD) $(WHITE) $$dir $(RED)"[KO]"$(DEFAULT); FAILED=1; }; \
-	done; \
-	if [ $$FAILED -eq 1 ]; then exit 1; fi
+	@$(ECHO) $(BOLD) $(CYAN)"[Cleaning workspace]" $(DEFAULT)
+	@cd $(WORKSPACE) && pnpm run clean && $(ECHO) $(BOLD) $(GREEN)"[Clean complete]"$(DEFAULT) || $(ECHO) $(BOLD) $(RED)"[Clean failed]"$(DEFAULT)
 
 re: clean install all
-re_prod: clean install all install_prod
+re_prod: clean install_prod all
 
 .PHONY: all install install_prod clean re re_prod
 
