@@ -1,28 +1,25 @@
-SRC =	./data/shared/core							\
-		./data/shared/server						\
-		./data/resources/\[scripts\]/player-spawn	\
+SHARED	=	./data/shared/core		\
+			./data/shared/server
 
-all:
-	@FAILED=0; \
-	for dir in $(SRC); do \
-		$(ECHO) $(BOLD) $(CYAN)"[Building] $$dir" $(DEFAULT); \
-		npm run build -s --prefix $$dir && $(ECHO) $(BOLD) $(WHITE) $$dir $(GREEN)"[OK]"$(DEFAULT) || { $(ECHO) $(BOLD) $(WHITE) $$dir $(RED)"[KO]"$(DEFAULT); FAILED=1; }; \
-	done; \
-	if [ $$FAILED -eq 1 ]; then exit 1; fi
+RESOURCES =	./data/resources/[scripts]/player-spawn
+
+SRC =		$(SHARED) $(RESOURCES)
+
+all: install build
 
 install:
 	@FAILED=0; \
 	for dir in $(SRC); do \
-		$(ECHO) $(BOLD) $(CYAN)"[Installing development environment] $$dir" $(DEFAULT); \
-		npm i --prefix $$dir && $(ECHO) $(BOLD) $(WHITE) $$dir $(GREEN)"[OK]"$(DEFAULT) || { $(ECHO) $(BOLD) $(WHITE) $$dir $(RED)"[KO]"$(DEFAULT); FAILED=1; }; \
+		$(ECHO) $(BOLD) $(CYAN)"[Installing] $$dir" $(DEFAULT); \
+		cd "$$dir" && yarn install && cd "$(CURDIR)" && $(ECHO) $(BOLD) $(WHITE) $$dir $(GREEN)"[OK]"$(DEFAULT) || { cd "$(CURDIR)"; $(ECHO) $(BOLD) $(WHITE) $$dir $(RED)"[KO]"$(DEFAULT); FAILED=1; }; \
 	done; \
 	if [ $$FAILED -eq 1 ]; then exit 1; fi
 
-install_prod:
+build:
 	@FAILED=0; \
 	for dir in $(SRC); do \
-		$(ECHO) $(BOLD) $(CYAN)"[Installing production environment] $$dir" $(DEFAULT); \
-		npm ci --production --prefix $$dir && $(ECHO) $(BOLD) $(WHITE) $$dir $(GREEN)"[OK]"$(DEFAULT) || { $(ECHO) $(BOLD) $(WHITE) $$dir $(RED)"[KO]"$(DEFAULT); FAILED=1; }; \
+		$(ECHO) $(BOLD) $(CYAN)"[Building] $$dir" $(DEFAULT); \
+		cd "$$dir" && yarn build && cd "$(CURDIR)" && $(ECHO) $(BOLD) $(WHITE) $$dir $(GREEN)"[OK]"$(DEFAULT) || { cd "$(CURDIR)"; $(ECHO) $(BOLD) $(WHITE) $$dir $(RED)"[KO]"$(DEFAULT); FAILED=1; }; \
 	done; \
 	if [ $$FAILED -eq 1 ]; then exit 1; fi
 
@@ -30,14 +27,13 @@ clean:
 	@FAILED=0; \
 	for dir in $(SRC); do \
 		$(ECHO) $(BOLD) $(CYAN)"[Cleaning] $$dir" $(DEFAULT); \
-		rm -rf $$dir/build/ $$dir/node_modules/ && $(ECHO) $(BOLD) $(WHITE) $$dir $(GREEN)"[OK]"$(DEFAULT) || { $(ECHO) $(BOLD) $(WHITE) $$dir $(RED)"[KO]"$(DEFAULT); FAILED=1; }; \
+		rm -rf "$$dir/build/" "$$dir/node_modules/" && $(ECHO) $(BOLD) $(WHITE) $$dir $(GREEN)"[OK]"$(DEFAULT) || { $(ECHO) $(BOLD) $(WHITE) $$dir $(RED)"[KO]"$(DEFAULT); FAILED=1; }; \
 	done; \
 	if [ $$FAILED -eq 1 ]; then exit 1; fi
 
-re: clean install all
-re_prod: clean install all install_prod
+re: clean all
 
-.PHONY: all install install_prod clean re re_prod
+.PHONY: all install build clean re
 
 
 ECHO	=			/bin/echo -e
