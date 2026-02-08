@@ -8,12 +8,8 @@ SRC =		$(SHARED) $(RESOURCES)
 all: install build
 
 install:
-	@FAILED=0; \
-	for dir in $(SRC); do \
-		$(ECHO) $(BOLD) $(CYAN)"[Installing] $$dir" $(DEFAULT); \
-		cd "$$dir" && yarn install && cd "$(CURDIR)" && $(ECHO) $(BOLD) $(WHITE) $$dir $(GREEN)"[OK]"$(DEFAULT) || { cd "$(CURDIR)"; $(ECHO) $(BOLD) $(WHITE) $$dir $(RED)"[KO]"$(DEFAULT); FAILED=1; }; \
-	done; \
-	if [ $$FAILED -eq 1 ]; then exit 1; fi
+	@$(ECHO) $(BOLD) $(CYAN)"[Installing] yarn workspaces" $(DEFAULT)
+	@cd data && yarn install && cd "$(CURDIR)" && $(ECHO) $(BOLD) $(GREEN)"[OK]"$(DEFAULT) || { cd "$(CURDIR)"; $(ECHO) $(BOLD) $(RED)"[KO]"$(DEFAULT); exit 1; }
 
 build:
 	@FAILED=0; \
@@ -27,8 +23,9 @@ clean:
 	@FAILED=0; \
 	for dir in $(SRC); do \
 		$(ECHO) $(BOLD) $(CYAN)"[Cleaning] $$dir" $(DEFAULT); \
-		rm -rf "$$dir/build/" "$$dir/node_modules/" && $(ECHO) $(BOLD) $(WHITE) $$dir $(GREEN)"[OK]"$(DEFAULT) || { $(ECHO) $(BOLD) $(WHITE) $$dir $(RED)"[KO]"$(DEFAULT); FAILED=1; }; \
+		rm -rf "$$dir/build/" && $(ECHO) $(BOLD) $(WHITE) $$dir $(GREEN)"[OK]"$(DEFAULT) || { $(ECHO) $(BOLD) $(WHITE) $$dir $(RED)"[KO]"$(DEFAULT); FAILED=1; }; \
 	done; \
+	rm -rf data/node_modules/; \
 	if [ $$FAILED -eq 1 ]; then exit 1; fi
 
 re: clean all

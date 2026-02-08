@@ -1,0 +1,21 @@
+{
+    "private": true,
+    "workspaces": {
+        "packages": [
+            "shared/*",
+            "resources/*/*"
+        ],
+        "nohoist": [
+            "**/mongoose",
+            "**/mongoose/**",
+            "**/redis",
+            "**/redis/**"
+        ]
+    },
+    "scripts": {
+        "build": "yarn build:shared && yarn build:resources",
+        "build:shared": "yarn workspace @shared/core build && yarn workspace @shared/server build",
+        "build:resources": "yarn workspace player-spawn build",
+        "clean": "yarn workspaces run clean"
+    }
+}

@@ -13,8 +13,8 @@
         "rootDir": "src/",
         "outDir": "build",
         "typeRoots": [
-            "node_modules/@types",
-            "node_modules/@citizenfx"
+            "../../node_modules/@types",
+            "../../node_modules/@citizenfx"
         ],
         "paths": {
             "@shared/core": ["../core/build"]

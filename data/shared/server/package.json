@@ -6,7 +6,8 @@
     "main": "build/index.js",
     "type": "module",
     "scripts": {
-        "build": "tsc"
+        "build": "tsc",
+        "clean": "rm -rf build/"
     },
     "devDependencies": {
         "@types/node": "^24.10.1",
@@ -15,8 +16,8 @@
     },
     "dependencies": {
         "@citizenfx/server": "^2.0.22819-1",
-        "@shared/core": "file:../core",
-        "mongoose": "^9.0.0",
+        "@shared/core": "1.0.0",
+        "mongoose": "^8.0.0",
         "redis": "^5.10.0"
     }
 }

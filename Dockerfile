@@ -15,7 +15,7 @@ COPY ./data/ /app/data/
 
 RUN chmod +x /app/data/create_resources_config.sh
 RUN (cd /app/data && ./create_resources_config.sh)
-RUN make re_prod
+RUN make re
 
 WORKDIR /app/data
 CMD /app/server/run.sh +exec /app/data/server.cfg

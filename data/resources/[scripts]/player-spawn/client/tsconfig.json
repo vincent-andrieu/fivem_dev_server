@@ -4,8 +4,8 @@
         "baseUrl": ".",
         "rootDir": "src/",
         "typeRoots": [
-            "../node_modules/@types",
-            "../node_modules/@citizenfx",
+            "../../../../node_modules/@types",
+            "../../../../node_modules/@citizenfx",
             "../../../../types"
         ]
     },

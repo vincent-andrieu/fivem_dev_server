@@ -6,7 +6,8 @@
     "main": "build/index.js",
     "type": "module",
     "scripts": {
-        "build": "tsc"
+        "build": "tsc",
+        "clean": "rm -rf build/"
     },
     "devDependencies": {
         "prettier": "^3.6.2",
