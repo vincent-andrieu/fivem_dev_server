@@ -25,7 +25,7 @@
         "@shared/server": "1.0.0",
         "@citizenfx/client": "^2.0.22819-1",
         "@citizenfx/server": "^2.0.22819-1",
-        "mongoose": "^8.0.0",
+        "mongoose": "^8.22.1",
         "redis": "^5.10.0"
     }
 }
