@@ -1,2 +1,4 @@
 /server/*
 !/server/.gitkeep
+
+.claude/settings.local.json
