@@ -7,9 +7,10 @@
         "start:server": "node ./build/server/server.js",
         "client": "rollup -c client/rollup.config.js",
         "server": "rollup -c server/rollup.config.js",
-        "build": "npm run client && npm run server"
+        "build": "yarn client && yarn server"
     },
     "devDependencies": {
+        "@rollup/plugin-alias": "^6.0.0",
         "@rollup/plugin-commonjs": "^29.0.0",
         "@rollup/plugin-node-resolve": "^16.0.3",
         "@types/node": "^24.10.1",
