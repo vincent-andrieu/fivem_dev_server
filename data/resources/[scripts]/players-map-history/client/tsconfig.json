@@ -1,0 +1,15 @@
+{
+    "extends": "../tsconfig",
+    "compilerOptions": {
+        "baseUrl": ".",
+        "rootDir": "src/",
+        "typeRoots": [
+            "../../../../node_modules/@types",
+            "../../../../node_modules/@citizenfx",
+            "../../../../types"
+        ]
+    },
+    "include": [
+        "./src/"
+    ]
+}

@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "module": "ESNext",
+        "target": "ESNext",
+        "moduleResolution": "node",
+        "declaration": false,
+        "strict": true,
+        "noImplicitAny": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "rootDir": "src/",
+        "outDir": "build/",
+        "resolveJsonModule": true,
+        "baseUrl": ".",
+        "paths": {
+            "@shared/server": ["../../../../../shared/server/build"],
+            "@shared/core": ["../../../../../shared/core/build"]
+        }
+    },
+    "include": ["src/"]
+}

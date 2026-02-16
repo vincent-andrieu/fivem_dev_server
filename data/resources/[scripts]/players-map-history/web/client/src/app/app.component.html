@@ -1,0 +1,14 @@
+<div class="flex h-screen w-screen overflow-hidden">
+    <aside class="w-80 shrink-0 border-r border-gray-700">
+        <app-sidebar
+            [players]="players()"
+            (visiblePlayersChange)="onVisiblePlayersChange($event)"
+            (filtersChange)="onFiltersChange($event)"
+            (liveModeChange)="onLiveModeChange($event)" />
+    </aside>
+    <main class="flex-1">
+        <app-map
+            [points]="points()"
+            [visiblePlayers]="visiblePlayers()" />
+    </main>
+</div>

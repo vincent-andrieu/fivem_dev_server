@@ -1,0 +1,30 @@
+{
+    "name": "players-map-history",
+    "version": "1.0.0",
+    "author": "gassastsina",
+    "license": "UNLICENSED",
+    "type": "module",
+    "scripts": {
+        "client": "rollup -c client/rollup.config.js",
+        "server": "rollup -c server/rollup.config.js",
+        "build": "yarn client && yarn server",
+        "clean": "rm -rf build/"
+    },
+    "devDependencies": {
+        "@rollup/plugin-alias": "^6.0.0",
+        "@rollup/plugin-commonjs": "^29.0.0",
+        "@rollup/plugin-node-resolve": "^16.0.3",
+        "@types/node": "^24.10.1",
+        "prettier": "^3.6.2",
+        "rollup": "^4.53.3",
+        "rollup-plugin-typescript2": "^0.36.0",
+        "typescript": "^5.9.3"
+    },
+    "dependencies": {
+        "@shared/core": "1.0.0",
+        "@shared/server": "1.0.0",
+        "@citizenfx/client": "^2.0.22819-1",
+        "@citizenfx/server": "^2.0.22819-1",
+        "mongoose": "^8.22.1"
+    }
+}

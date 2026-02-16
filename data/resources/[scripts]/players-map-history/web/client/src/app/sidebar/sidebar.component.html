@@ -1,0 +1,55 @@
+<div class="flex flex-col h-full bg-gray-900 text-gray-100 p-4 overflow-y-auto">
+    <h2 class="text-lg font-bold mb-4 text-amber-400">Players Map History</h2>
+
+    <!-- Search -->
+    <mat-form-field appearance="outline" class="w-full mb-3">
+        <mat-label>Search player</mat-label>
+        <input matInput [(ngModel)]="searchQuery" placeholder="Name or ID..." />
+        <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+
+    <!-- Live mode toggle -->
+    <button mat-raised-button
+            [color]="liveMode() ? 'warn' : 'primary'"
+            class="mb-4 w-full"
+            (click)="toggleLive()">
+        <mat-icon>{{ liveMode() ? 'stop' : 'play_arrow' }}</mat-icon>
+        {{ liveMode() ? 'Stop Live' : 'Live Sessions' }}
+    </button>
+
+    <!-- Time range -->
+    <div class="mb-4" [class.opacity-50]="liveMode()">
+        <label class="text-sm text-gray-400 mb-1 block">Time range (hours ago)</label>
+        <mat-slider [min]="0" [max]="72" [step]="1" [discrete]="true" class="w-full">
+            <input matSliderStartThumb [(ngModel)]="timeRangeStart" (ngModelChange)="onTimeRangeChange()" />
+            <input matSliderEndThumb [(ngModel)]="timeRangeEnd" (ngModelChange)="onTimeRangeChange()" />
+        </mat-slider>
+        <div class="text-xs text-gray-500 flex justify-between">
+            <span>{{ timeRangeStart }}h ago</span>
+            <span>{{ timeRangeEnd === 0 ? 'Now' : timeRangeEnd + 'h ago' }}</span>
+        </div>
+    </div>
+
+    <!-- Player list -->
+    <div class="text-sm text-gray-400 mb-2">Players ({{ filteredPlayers().length }})</div>
+    <div class="flex-1 overflow-y-auto space-y-1">
+        @for (player of filteredPlayers(); track player._id) {
+        <div class="flex items-center gap-2 p-2 rounded hover:bg-gray-800 cursor-pointer">
+            <div class="w-3 h-3 rounded-full shrink-0"
+                 [style.background-color]="getPlayerColor(player._id ?? '')"></div>
+            <mat-checkbox
+                          [checked]="isPlayerVisible(player._id ?? '')"
+                          (change)="togglePlayer(player._id ?? '')"
+                          class="flex-1">
+                <span class="text-sm truncate">{{ player.name }}</span>
+            </mat-checkbox>
+        </div>
+        }
+    </div>
+
+    <!-- Select all / none -->
+    <div class="flex gap-2 mt-2 pt-2 border-t border-gray-700">
+        <button mat-stroked-button class="flex-1 text-xs" (click)="selectAll()">All</button>
+        <button mat-stroked-button class="flex-1 text-xs" (click)="selectNone()">None</button>
+    </div>
+</div>

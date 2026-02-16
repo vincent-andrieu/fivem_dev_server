@@ -525,12 +525,6 @@ function parseStateList(value: string): string[] {
 
 **Serveur** (`server/src/config.ts`) — utilise des convars **non-répliquées** (`set`) :
 
-```typescript
-export const serverConfig = {
-    ttlDays: GetConvarInt("pmh_ttl_days", 30) // Rétention en jours (serveur uniquement)
-};
-```
-
 Les convars ne sont **pas définies** dans `server.cfg` par défaut (les valeurs par défaut s'appliquent). Elles sont **documentées** dans `server.cfg` via des commentaires :
 
 ```cfg
@@ -543,9 +537,6 @@ Les convars ne sont **pas définies** dans `server.cfg` par défaut (les valeurs
 # setr pmh_trigger_vehicle "true"       # Trigger monter/descendre/changer de siège véhicule
 # setr pmh_trigger_weapon "true"        # Trigger changement d'arme
 # setr pmh_trigger_aiming "true"        # Trigger début/fin de visée
-#
-# -- Convars serveur uniquement --
-# set pmh_ttl_days 30                   # Rétention des données en jours
 ```
 
 ---
