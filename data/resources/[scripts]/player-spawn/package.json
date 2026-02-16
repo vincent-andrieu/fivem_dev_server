@@ -1,6 +1,7 @@
 {
     "name": "player-spawn",
     "version": "1.0.0",
+    "author": "gassastsina",
     "license": "UNLICENSED",
     "type": "module",
     "scripts": {

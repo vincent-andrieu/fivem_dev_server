@@ -3,7 +3,8 @@
     "workspaces": {
         "packages": [
             "shared/*",
-            "resources/*/*"
+            "resources/*/*",
+            "resources/*/players-map-history/web/*"
         ],
         "nohoist": [
             "**/mongoose",
@@ -15,7 +16,7 @@
     "scripts": {
         "build": "yarn build:shared && yarn build:resources",
         "build:shared": "yarn workspace @shared/core build && yarn workspace @shared/server build",
-        "build:resources": "yarn workspace player-spawn build",
+        "build:resources": "yarn workspace player-spawn build && yarn workspace players-map-history build",
         "clean": "yarn workspaces run clean"
     }
 }

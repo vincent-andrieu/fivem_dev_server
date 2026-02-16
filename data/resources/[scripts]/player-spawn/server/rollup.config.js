@@ -14,6 +14,9 @@ export default {
         format: "commonjs"
     },
     external: ["mongoose", "redis"],
+    treeshake: {
+        moduleSideEffects: "no-external"
+    },
     plugins: [
         alias({
             entries: [

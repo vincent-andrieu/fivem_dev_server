@@ -11,6 +11,7 @@ services:
 
   mongo:
     image: mongo:8
+    command: ["--replSet", "rs0"]
     ports:
       - 127.0.0.1:27017:27017
     networks:
@@ -18,6 +19,28 @@ services:
     volumes:
       - mongo:/data/db
     restart: on-failure
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mongo-init-replica:
+    image: mongo:8
+    networks:
+      - mongo
+    depends_on:
+      mongo:
+        condition: service_healthy
+    restart: "no"
+    entrypoint: >
+      mongosh --host mongo:27017 --eval '
+        try {
+          rs.status();
+        } catch(e) {
+          rs.initiate({ _id: "rs0", members: [{ _id: 0, host: "localhost:27017" }] });
+        }
+      '
 
   redis:
     image: redis:7
@@ -27,6 +50,29 @@ services:
       - redis
     volumes:
       - redis:/data
+    restart: on-failure
+
+  players-map-history-web-server:
+    build: ./data/resources/[scripts]/players-map-history/web/server
+    ports:
+      - 127.0.0.1:3000:3000
+    networks:
+      - mongo
+    depends_on:
+      mongo-init-replica:
+        condition: service_completed_successfully
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/fivem_dev?replicaSet=rs0
+      - PORT=3000
+      - CORS_ORIGIN=http://localhost:4200
+    restart: on-failure
+
+  players-map-history-web-client:
+    build: ./data/resources/[scripts]/players-map-history/web/client
+    ports:
+      - 127.0.0.1:4200:80
+    depends_on:
+      - players-map-history-web-server
     restart: on-failure
 
 networks:

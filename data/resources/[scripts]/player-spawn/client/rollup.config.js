@@ -13,6 +13,9 @@ export default {
         file: "build/client/client.js",
         format: "commonjs"
     },
+    treeshake: {
+        moduleSideEffects: "no-external"
+    },
     plugins: [
         alias({
             entries: [

@@ -4,8 +4,8 @@ WORKDIR /app
 
 RUN apt-get update && apt-get install -y xz-utils make
 
-# FiveM Version: 7290
-ADD https://runtime.fivem.net/artifacts/fivem/build_proot_linux/master/7290-a654bcc2adfa27c4e020fc915a1a6343c3b4f921/fx.tar.xz /app/server/fx.tar.xz
+# FiveM Version: 25770
+ADD https://runtime.fivem.net/artifacts/fivem/build_proot_linux/master/25770-8ddccd4e4dfd6a760ce18651656463f961cc4761/fx.tar.xz /app/server/fx.tar.xz
 
 RUN tar -xf /app/server/fx.tar.xz -C /app/server && \
     rm /app/server/fx.tar.xz

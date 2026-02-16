@@ -1,7 +1,8 @@
 SHARED	=	./data/shared/core		\
 			./data/shared/server
 
-RESOURCES =	./data/resources/[scripts]/player-spawn
+RESOURCES =	./data/resources/[scripts]/player-spawn		\
+			./data/resources/[scripts]/players-map-history
 
 SRC =		$(SHARED) $(RESOURCES)
 
