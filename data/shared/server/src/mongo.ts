@@ -12,7 +12,7 @@ export async function initMongo(): Promise<void> {
         console.error(error);
         throw new Error("Database connection failed");
     }
-    console.info("Mongo successfully connected :", uri);
+    console.info("Mongo successfully connected :", `${mongoose.connection.host}:${mongoose.connection.port}/${mongoose.connection.name}`);
 }
 
 function getMongoUri(): string {
