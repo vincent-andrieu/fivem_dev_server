@@ -11,7 +11,7 @@ export default abstract class TemplateModel<T extends TemplateObject> {
         collectionName: string,
         schema: mongoose.Schema
     ) {
-        this._model = mongoose.model<mongoose.Model<T>>(collectionName, schema);
+        this._model = (mongoose.models[collectionName] as mongoose.Model<mongoose.Model<T>>) || mongoose.model<mongoose.Model<T>>(collectionName, schema);
     }
 
     public async add(obj: NonTemplateObjectFunctions<T>): Promise<T> {
@@ -91,6 +91,10 @@ export default abstract class TemplateModel<T extends TemplateObject> {
                 throw new Error("TemplateSchema.delete(string) Not found");
             }
         }
+    }
+
+    public watch(pipeline: mongoose.mongo.Document[], options?: mongoose.mongo.ChangeStreamOptions) {
+        return this._model.watch(pipeline, options);
     }
 
     protected _parseFieldsSelector(fields: string, obj: Record<string, unknown>): Record<string, unknown> {

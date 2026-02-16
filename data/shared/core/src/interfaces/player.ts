@@ -12,6 +12,7 @@ export type PlayerIdentifiers = {
 export default class Player extends TemplateObject {
     public position: Position;
     public identifiers: PlayerIdentifiers;
+    public name?: string;
 
     constructor(obj: NonTemplateObjectFunctions<Player>) {
         super(obj);
@@ -31,6 +32,10 @@ export default class Player extends TemplateObject {
         };
         if (obj.identifiers.fivem) {
             this.identifiers.fivem = obj.identifiers.fivem;
+        }
+
+        if (obj.name) {
+            this.name = obj.name;
         }
 
         this._validation();

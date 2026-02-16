@@ -1,7 +1,5 @@
 import redis from "redis";
 
-const REDIS_URL = GetConvar("REDIS_URL", "redis://localhost:6379");
-
 export type RedisClient = ReturnType<typeof redis.createClient>;
 
 export async function initRedis(): Promise<RedisClient> {
@@ -19,8 +17,9 @@ export async function initRedis(): Promise<RedisClient> {
 }
 
 function getRedisUrl(): string {
-    if (REDIS_URL) {
-        return REDIS_URL;
+    const url = GetConvar("REDIS_URL", "redis://localhost:6379");
+    if (url) {
+        return url;
     }
     throw new Error("Missing Redis configuration");
 }

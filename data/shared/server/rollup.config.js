@@ -9,6 +9,9 @@ export default {
         format: "commonjs" // The output format ('module', 'commonjs', 'iife', 'umd', 'amd', 'system')
     },
     external: ["mongoose", "redis"],
+    treeshake: {
+        moduleSideEffects: "no-external"
+    },
     plugins: [
         resolve(), // Allows Rollup to resolve modules
         commonjs(), // Converts CommonJS modules to ES6
