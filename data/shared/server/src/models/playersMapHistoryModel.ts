@@ -2,6 +2,7 @@ import { PlayersMapHistory } from "@shared/core";
 import { RootFilterQuery } from "mongoose";
 import playersMapHistorySchema from "../schemas/playersMapHistorySchema";
 import { toObjectId } from "../utils";
+import PlayersModel from "./playersModel";
 import TemplateModel from "./templateModel";
 
 export interface PointsFilter {
@@ -23,7 +24,7 @@ export interface PaginatedResult<T> {
 
 export default class PlayersMapHistoryModel extends TemplateModel<PlayersMapHistory> {
     constructor() {
-        super(PlayersMapHistory, "players_map_history", playersMapHistorySchema);
+        super(PlayersMapHistory, "players_map_history", playersMapHistorySchema, [PlayersModel]);
     }
 
     public async getPoints(filter: PointsFilter, page: number, limit: number): Promise<PaginatedResult<PlayersMapHistory>> {

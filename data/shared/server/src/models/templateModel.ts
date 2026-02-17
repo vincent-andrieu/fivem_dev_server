@@ -3,15 +3,24 @@ import mongoose from "mongoose";
 import { NonTemplateObjectFunctions, TemplateObject } from "@shared/core";
 import { ObjectConstructor, ObjectId, toObjectId } from "../utils";
 
-export default abstract class TemplateModel<T extends TemplateObject> {
+export default abstract class TemplateModel<T extends TemplateObject, D extends TemplateModel<any> = any> {
     protected _model: mongoose.Model<mongoose.Model<T>>;
 
     constructor(
         protected _ctor: ObjectConstructor<T>,
         collectionName: string,
-        schema: mongoose.Schema
+        schema: mongoose.Schema,
+        dependencies: Array<new () => D> = []
     ) {
         this._model = (mongoose.models[collectionName] as mongoose.Model<mongoose.Model<T>>) || mongoose.model<mongoose.Model<T>>(collectionName, schema);
+
+        if (!this._isRegistered) {
+            dependencies.forEach((dependency) => new dependency());
+        }
+    }
+
+    private get _isRegistered(): boolean {
+        return !!mongoose.models[this._model.collection.name];
     }
 
     public async add(obj: NonTemplateObjectFunctions<T>): Promise<T> {
