@@ -25,3 +25,7 @@ export function nonBlockingWait(waitCondition: () => boolean, ms: number): Promi
         }, ms);
     });
 }
+
+export function isNotObjectId(obj: any): boolean {
+    return typeof obj === "object" && typeof (obj as any).toHexString !== "function";
+}

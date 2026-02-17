@@ -1,5 +1,5 @@
 import { ComponentData, PlayerState, VehicleData } from "../players-map-history/types";
-import { Position } from "../utils";
+import { isNotObjectId, Position } from "../utils";
 import Player from "./player";
 import TemplateObject, { NonTemplateObjectFunctions } from "./templateObject";
 
@@ -16,7 +16,7 @@ export default class PlayersMapHistory extends TemplateObject {
     constructor(obj: NonTemplateObjectFunctions<PlayersMapHistory>) {
         super(obj);
 
-        this.player = typeof obj.player === "string" ? obj.player : new Player(obj.player);
+        this.player = isNotObjectId(obj.player) ? new Player(obj.player as Player) : obj.player.toString();
         this.sessionId = obj.sessionId;
         this.coords = {
             x: obj.coords.x,
