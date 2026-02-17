@@ -20,12 +20,12 @@ export function collectPlayerState(): PlayerState {
     if (IsPedSwimming(ped)) return PlayerState.SWIMMING;
     if (IsPedClimbing(ped)) return PlayerState.CLIMBING;
     if (IsPedFalling(ped)) return PlayerState.FALLING;
-    if (IsPedInAnyVehicle(ped, false)) return PlayerState.IN_VEHICLE;
+    if (IsPedInAnyVehicle(ped, false)) return PlayerState.VEHICLE;
     if (IsPedSprinting(ped)) return PlayerState.SPRINTING;
     if (IsPedRunning(ped)) return PlayerState.RUNNING;
     if (IsPedWalking(ped)) return PlayerState.WALKING;
 
-    return PlayerState.ON_FOOT;
+    return PlayerState.FOOT;
 }
 
 function getPedVehicleSeat(ped: number, vehicle: number): number {

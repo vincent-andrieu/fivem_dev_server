@@ -1,7 +1,7 @@
 import { Position } from "../utils";
 
 export enum PlayerState {
-    ON_FOOT = "on_foot",
+    FOOT = "foot",
     WALKING = "walking",
     RUNNING = "running",
     SPRINTING = "sprinting",
@@ -10,7 +10,7 @@ export enum PlayerState {
     PARACHUTING = "parachuting",
     CLIMBING = "climbing",
     FALLING = "falling",
-    IN_VEHICLE = "in_vehicle",
+    VEHICLE = "vehicle",
     RAGDOLL = "ragdoll",
     DEAD = "dead"
 }

@@ -15,7 +15,7 @@ export const clientConfig = {
     idleTimeout: GetConvarInt("pmh_idle_timeout", 5 * 60 * 1000),
 
     triggerDistance: GetConvarInt("pmh_trigger_distance", 50),
-    triggerState: parseStateList(GetConvar("pmh_trigger_state", "dead, ragdoll, parachuting, swimming, diving, climbing, falling, in_vehicle")),
+    triggerState: parseStateList(GetConvar("pmh_trigger_state", "dead, ragdoll, parachuting, swimming, diving, climbing, falling, vehicle")),
     triggerVehicle: GetConvar("pmh_trigger_vehicle", "true") === "true",
     triggerWeapon: GetConvar("pmh_trigger_weapon", "true") === "true",
     triggerAiming: GetConvar("pmh_trigger_aiming", "true") === "true"

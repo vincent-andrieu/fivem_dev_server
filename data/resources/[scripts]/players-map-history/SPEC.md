@@ -63,16 +63,16 @@ Le projet se compose de **trois parties** :
 
 Les champs optionnels n'existent pas en base s'il n'y a pas de donnée (jamais de `null`).
 
-| Donnée        | Type                     | Requis | Source  | Description                                                                                                                               |
-| ------------- | ------------------------ | ------ | ------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| `player`      | `ObjectId`               | oui    | Serveur | Réf. vers la collection `players` (résolu via `PlayersModel`)                                                                             |
-| `sessionId`   | `number`                 | oui    | Serveur | ID temporaire sur le serveur FiveM (`source`)                                                                                             |
-| `coords`      | `{ x, y, z, heading }`   | oui    | Client  | Position et orientation du joueur                                                                                                         |
-| `vehicle`     | `{ model, plate, seat }` | non    | Client  | Modèle, plaque et siège (-1 = conducteur, 0+ = passagers). Absent si à pied                                                               |
-| `playerState` | `enum`                   | oui    | Client  | `on_foot`, `walking`, `running`, `sprinting`, `swimming`, `diving`, `parachuting`, `climbing`, `falling`, `in_vehicle`, `ragdoll`, `dead` |
-| `skin`        | `ComponentData[]`        | non    | Client  | Composants vestimentaires complets (drawable + texture par slot). Données volumineuses, pas affichées en premier plan côté UI             |
-| `weapon`      | `string`                 | non    | Client  | Hash/nom de l'arme en main. **Absent si le joueur est désarmé** (`WEAPON_UNARMED` — jamais stocké en base)                                |
-| `isAiming`    | `boolean`                | non    | Client  | Présent et `true` uniquement si le joueur est en train de viser                                                                           |
+| Donnée        | Type                     | Requis | Source  | Description                                                                                                                         |
+| ------------- | ------------------------ | ------ | ------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `player`      | `ObjectId`               | oui    | Serveur | Réf. vers la collection `players` (résolu via `PlayersModel`)                                                                       |
+| `sessionId`   | `number`                 | oui    | Serveur | ID temporaire sur le serveur FiveM (`source`)                                                                                       |
+| `coords`      | `{ x, y, z, heading }`   | oui    | Client  | Position et orientation du joueur                                                                                                   |
+| `vehicle`     | `{ model, plate, seat }` | non    | Client  | Modèle, plaque et siège (-1 = conducteur, 0+ = passagers). Absent si à pied                                                         |
+| `playerState` | `enum`                   | oui    | Client  | `foot`, `walking`, `running`, `sprinting`, `swimming`, `diving`, `parachuting`, `climbing`, `falling`, `vehicle`, `ragdoll`, `dead` |
+| `skin`        | `ComponentData[]`        | non    | Client  | Composants vestimentaires complets (drawable + texture par slot). Données volumineuses, pas affichées en premier plan côté UI       |
+| `weapon`      | `string`                 | non    | Client  | Hash/nom de l'arme en main. **Absent si le joueur est désarmé** (`WEAPON_UNARMED` — jamais stocké en base)                          |
+| `isAiming`    | `boolean`                | non    | Client  | Présent et `true` uniquement si le joueur est en train de viser                                                                     |
 
 Les champs `createdAt` et `updatedAt` sont gérés automatiquement par Mongoose (`timestamps: true`). Le `createdAt` sert de date du snapshot.
 
@@ -157,11 +157,11 @@ Le premier état `true` gagne :
 | `swimming`    | `IsPedSwimming(ped)`            |                                                         |
 | `climbing`    | `IsPedClimbing(ped)`            |                                                         |
 | `falling`     | `IsPedFalling(ped)`             |                                                         |
-| `in_vehicle`  | `IsPedInAnyVehicle(ped, false)` |                                                         |
+| `vehicle`     | `IsPedInAnyVehicle(ped, false)` |                                                         |
 | `sprinting`   | `IsPedSprinting(ped)`           |                                                         |
 | `running`     | `IsPedRunning(ped)`             |                                                         |
 | `walking`     | `IsPedWalking(ped)`             |                                                         |
-| `on_foot`     | fallback                        | Si aucun autre état détecté                             |
+| `foot`        | fallback                        | Si aucun autre état détecté                             |
 
 **Note** : `IsPedRunning`, `IsPedSprinting`, `IsPedWalking`, `IsPedStill` sont dans la catégorie `TASK/` des natives.
 
@@ -269,7 +269,7 @@ TriggerServerEvent('players-map-history:snapshot')
     plate: string,
     seat: number               // -1 = conducteur, 0+ = passagers
   },
-  playerState: string,         // enum: on_foot, walking, running, sprinting, swimming, diving, parachuting, climbing, falling, in_vehicle, ragdoll, dead
+  playerState: string,         // enum: foot, walking, running, sprinting, swimming, diving, parachuting, climbing, falling, vehicle, ragdoll, dead
   skin?: ComponentData[],      // Composants vestimentaires complets
   weapon?: string,             // Hash de l'arme en main, absent si désarmé (WEAPON_UNARMED jamais stocké)
   isAiming?: boolean,          // Présent et true uniquement si le joueur vise
@@ -507,7 +507,7 @@ export const clientConfig = {
 
     // Triggers instantanés
     triggerDistance: GetConvarInt("pmh_trigger_distance", 50), // Distance 3D en mètres ; <= 0 = désactivé
-    triggerState: parseStateList(GetConvar("pmh_trigger_state", "dead, ragdoll, parachuting, swimming, diving, climbing, falling, in_vehicle")),
+    triggerState: parseStateList(GetConvar("pmh_trigger_state", "dead, ragdoll, parachuting, swimming, diving, climbing, falling, vehicle")),
     triggerVehicle: GetConvar("pmh_trigger_vehicle", "true") === "true",
     triggerWeapon: GetConvar("pmh_trigger_weapon", "true") === "true",
     triggerAiming: GetConvar("pmh_trigger_aiming", "true") === "true"
@@ -533,7 +533,7 @@ Les convars ne sont **pas définies** dans `server.cfg` par défaut (les valeurs
 # setr pmh_default_interval 30000       # Intervalle snapshot périodique en ms (min: 1000)
 # setr pmh_idle_timeout 300000          # Timeout idle en ms (défaut: 5 min)
 # setr pmh_trigger_distance 50          # Distance 3D en mètres pour snapshot immédiat (<= 0 = désactivé)
-# setr pmh_trigger_state "dead, ragdoll, parachuting, swimming, diving, climbing, falling, in_vehicle"  # États déclencheurs ('' = désactivé)
+# setr pmh_trigger_state "dead, ragdoll, parachuting, swimming, diving, climbing, falling, vehicle"  # États déclencheurs ('' = désactivé)
 # setr pmh_trigger_vehicle "true"       # Trigger monter/descendre/changer de siège véhicule
 # setr pmh_trigger_weapon "true"        # Trigger changement d'arme
 # setr pmh_trigger_aiming "true"        # Trigger début/fin de visée
