@@ -28,6 +28,21 @@ export function collectPlayerState(): PlayerState {
     return PlayerState.ON_FOOT;
 }
 
+function getPedVehicleSeat(ped: number, vehicle: number): number {
+    if (GetPedInVehicleSeat(vehicle, -1) === ped) {
+        return -1;
+    }
+
+    const maxPassengers = GetVehicleMaxNumberOfPassengers(vehicle);
+
+    for (let seat = 0; seat < maxPassengers; seat++) {
+        if (GetPedInVehicleSeat(vehicle, seat) === ped) {
+            return seat;
+        }
+    }
+    return -1;
+}
+
 export function collectVehicle(): VehicleData | undefined {
     const ped = PlayerPedId();
     const vehicle = GetVehiclePedIsIn(ped, false);
@@ -39,7 +54,7 @@ export function collectVehicle(): VehicleData | undefined {
     const modelHash = GetEntityModel(vehicle);
     const model = GetDisplayNameFromVehicleModel(modelHash);
     const plate = GetVehicleNumberPlateText(vehicle).trim();
-    const seat = GetSeatPedIsUsing(ped);
+    const seat = getPedVehicleSeat(ped, vehicle);
 
     return { model, plate, seat };
 }
