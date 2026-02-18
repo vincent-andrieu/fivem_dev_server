@@ -1,8 +1,8 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { PlayersMapHistory } from "@shared/core";
 import { Observable } from "rxjs";
 import { environment } from "../../../environments/environment";
-import { PlayersMapHistory } from "@shared/core";
 import { PointsResponse } from "../interfaces/point.interface";
 
 export interface PointsFilter {
