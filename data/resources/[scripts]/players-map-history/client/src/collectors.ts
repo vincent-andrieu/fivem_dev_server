@@ -61,13 +61,12 @@ export function collectVehicle(): VehicleData | undefined {
 
 export function collectWeapon(): string | undefined {
     const ped = PlayerPedId();
-    const weaponHash = GetSelectedPedWeapon(ped);
+    const weaponHash = GetSelectedPedWeapon(ped) >>> 0;
 
     if (weaponHash === WEAPON_UNARMED) {
         return undefined;
     }
-
-    return `0x${weaponHash.toString(16).toUpperCase()}`;
+    return weaponHash.toString();
 }
 
 export function collectAiming(): boolean | undefined {
