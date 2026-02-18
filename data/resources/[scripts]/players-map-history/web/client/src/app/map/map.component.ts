@@ -21,11 +21,11 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
     constructor(private _colorService: PlayerColorService) {
         effect(() => {
-            const pts = this.points();
+            const pointsHistory = this.points();
             const visible = this.visiblePlayers();
 
             if (this._map) {
-                this._renderPoints(pts, visible);
+                this._renderPoints(pointsHistory, visible);
             }
         });
     }
