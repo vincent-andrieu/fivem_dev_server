@@ -11,10 +11,10 @@ function parseStateList(value: string): PlayerState[] {
 }
 
 export const clientConfig = {
-    defaultInterval: Math.max(GetConvarInt("pmh_default_interval", 30000), 1000),
+    defaultInterval: Math.max(GetConvarInt("pmh_default_interval", 30000), 30000),
     idleTimeout: GetConvarInt("pmh_idle_timeout", 5 * 60 * 1000),
 
-    triggerDistance: GetConvarInt("pmh_trigger_distance", 50),
+    triggerDistance: GetConvarInt("pmh_trigger_distance", 200),
     triggerState: parseStateList(GetConvar("pmh_trigger_state", "dead, ragdoll, parachuting, swimming, diving, climbing, falling, vehicle")),
     triggerVehicle: GetConvar("pmh_trigger_vehicle", "true") === "true",
     triggerWeapon: GetConvar("pmh_trigger_weapon", "true") === "true",
