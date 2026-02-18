@@ -58,7 +58,7 @@ export function getStateIcon(playerState: PlayerState, isAiming?: boolean): stri
         return "gps_fixed";
     }
     switch (playerState) {
-        case PlayerState.IN_VEHICLE:
+        case PlayerState.VEHICLE:
             return "directions_car";
         case PlayerState.DEAD:
             return "dangerous";
