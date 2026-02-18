@@ -25,8 +25,8 @@
             <input matSliderEndThumb [(ngModel)]="timeRangeEnd" (ngModelChange)="onTimeRangeChange()" />
         </mat-slider>
         <div class="text-xs text-gray-500 flex justify-between">
-            <span>{{ timeRangeStart }}h ago</span>
-            <span>{{ timeRangeEnd === 0 ? 'Now' : timeRangeEnd + 'h ago' }}</span>
+            <span>{{ timeRangeStart === 0 ? 'Now' : timeRangeStart + 'h ago' }}</span>
+            <span>{{ timeRangeEnd }}h ago</span>
         </div>
     </div>
 

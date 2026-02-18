@@ -21,8 +21,8 @@ export class SidebarComponent {
     players = input<Player[]>([]);
     selectedPlayerIds = signal<Set<string>>(new Set());
     searchQuery = "";
-    timeRangeStart = DEFAULT_FROM_FILTER_HOURS;
-    timeRangeEnd = 0;
+    timeRangeStart = 0;
+    timeRangeEnd = DEFAULT_FROM_FILTER_HOURS;
     liveModeSignal = signal(false);
     liveMode = this.liveModeSignal.asReadonly();
     visiblePlayersChange = output<Set<string>>();
@@ -98,8 +98,8 @@ export class SidebarComponent {
             return;
         }
         const now = Date.now();
-        const from = new Date(now - this.timeRangeStart * 60 * 60 * 1000).toISOString();
-        const to = this.timeRangeEnd === 0 ? undefined : new Date(now - this.timeRangeEnd * 60 * 60 * 1000).toISOString();
+        const from = new Date(now - this.timeRangeEnd * 60 * 60 * 1000).toISOString();
+        const to = this.timeRangeStart === 0 ? undefined : new Date(now - this.timeRangeStart * 60 * 60 * 1000).toISOString();
 
         this.filtersChange.emit({ from, to });
     }
