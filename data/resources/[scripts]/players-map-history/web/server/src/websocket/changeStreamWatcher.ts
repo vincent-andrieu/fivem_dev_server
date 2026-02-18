@@ -1,3 +1,4 @@
+import { PlayersMapHistory } from "@shared/core";
 import { PlayersMapHistoryModel } from "@shared/server";
 import { WebSocket, WebSocketServer } from "ws";
 
@@ -7,14 +8,18 @@ export function startChangeStreamWatcher(wss: WebSocketServer): void {
 
     changeStream.on("change", (change) => {
         if (change.operationType === "insert") {
-            const point = change.fullDocument;
-            const message = JSON.stringify({ type: "new_point", data: point });
+            try {
+                const point = new PlayersMapHistory(change.fullDocument);
+                const message = JSON.stringify({ type: "new_point", data: point });
 
-            wss.clients.forEach((client) => {
-                if (client.readyState === WebSocket.OPEN) {
-                    client.send(message);
-                }
-            });
+                wss.clients.forEach((client) => {
+                    if (client.readyState === WebSocket.OPEN) {
+                        client.send(message);
+                    }
+                });
+            } catch (error) {
+                console.error("Error processing change stream document:", error);
+            }
         }
     });
 

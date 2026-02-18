@@ -1,6 +1,6 @@
 import { Component, computed, effect, signal } from "@angular/core";
-import { MapComponent } from "./map/map.component";
 import { Player, PlayersMapHistory } from "@shared/core";
+import { MapComponent } from "./map/map.component";
 import { ApiService, PointsFilter } from "./shared/services/api.service";
 import { WebSocketService } from "./shared/services/websocket.service";
 import { SidebarComponent } from "./sidebar/sidebar.component";
@@ -21,7 +21,7 @@ export class AppComponent {
 
         for (const point of this.points()) {
             const player = point.player as Player;
-            
+
             if (player?._id && !seen.has(player._id)) {
                 seen.set(player._id, player);
             }
