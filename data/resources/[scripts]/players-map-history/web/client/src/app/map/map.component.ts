@@ -17,7 +17,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     private _map!: L.Map;
     private _markerCluster!: L.MarkerClusterGroup;
     private _polylines = new Map<string, L.Polyline>();
-    private _markers: L.CircleMarker[] = [];
+    private _markers: L.Marker[] = [];
     private _hitLayer!: L.LayerGroup;
 
     constructor(private _colorService: PlayerColorService) {
@@ -114,14 +114,26 @@ export class MapComponent implements AfterViewInit, OnDestroy {
                 const [lat, lng] = gtaToLeaflet(point.coords.x, point.coords.y);
                 latLngs.push([lat, lng]);
 
-                const marker = L.circleMarker([lat, lng], {
-                    radius: 6,
-                    fillColor: color,
-                    color: "#fff",
-                    weight: 1,
-                    opacity: 1,
-                    fillOpacity: 0.85,
-                    interactive: false
+                const icon = getStateIcon(point.playerState, point.isAiming);
+                const pointSize = 20;
+                const marker = L.marker([lat, lng], {
+                    interactive: false,
+                    icon: L.divIcon({
+                        html: `<div style="
+                            background-color: ${color};
+                            width: ${pointSize}px;
+                            height: ${pointSize}px;
+                            border-radius: 50%;
+                            border: 1.5px solid #fff;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+                        "><span class="material-icons" style="font-size: 12px; color: #fff;">${icon}</span></div>`,
+                        className: "",
+                        iconSize: L.point(pointSize, pointSize),
+                        iconAnchor: L.point(pointSize / 2, pointSize / 2)
+                    })
                 });
 
                 (marker as any).playerColor = color;
@@ -134,7 +146,6 @@ export class MapComponent implements AfterViewInit, OnDestroy {
                 });
                 (hitMarker as any).playerColor = color;
 
-                const icon = getStateIcon(point.playerState, point.isAiming);
                 const date = new Date(point.createdAt ?? 0).toLocaleString();
                 let popupContent = `
                     <div style="font-size: 13px; min-width: 180px;">
