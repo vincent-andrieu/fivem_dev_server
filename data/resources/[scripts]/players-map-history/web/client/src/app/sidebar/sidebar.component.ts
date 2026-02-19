@@ -89,14 +89,25 @@ export class SidebarComponent {
 
     toggleLive(): void {
         const newMode = !this.liveModeSignal();
+
+        if (newMode) {
+            this.timeRangeStart = 0;
+        }
+
         this.liveModeSignal.set(newMode);
         this.liveModeChange.emit(newMode);
+
+        if (!newMode) {
+            this.onTimeRangeChange();
+        }
     }
 
     onTimeRangeChange(): void {
-        if (this.liveMode()) {
-            return;
+        if (this.liveMode() && this.timeRangeStart !== 0) {
+            this.liveModeSignal.set(false);
+            this.liveModeChange.emit(false);
         }
+
         const now = Date.now();
         const from = new Date(now - this.timeRangeEnd * 60 * 60 * 1000).toISOString();
         const to = this.timeRangeStart === 0 ? undefined : new Date(now - this.timeRangeStart * 60 * 60 * 1000).toISOString();

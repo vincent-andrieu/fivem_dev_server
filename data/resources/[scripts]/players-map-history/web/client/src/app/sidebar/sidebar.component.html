@@ -18,7 +18,7 @@
     </button>
 
     <!-- Time range -->
-    <div class="mb-4" [class.opacity-50]="liveMode()">
+    <div class="mb-4">
         <label class="text-sm text-gray-400 mb-1 block">Time range (hours ago)</label>
         <mat-slider [min]="0" [max]="72" [step]="1" [discrete]="true" class="w-full">
             <input matSliderStartThumb [(ngModel)]="timeRangeStart" (ngModelChange)="onTimeRangeChange()" />
