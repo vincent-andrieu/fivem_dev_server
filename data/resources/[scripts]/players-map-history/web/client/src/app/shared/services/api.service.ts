@@ -1,6 +1,5 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { PlayersMapHistory } from "@shared/core";
 import { Observable } from "rxjs";
 import { environment } from "../../../environments/environment";
 import { PointsResponse } from "../interfaces/point.interface";
@@ -43,9 +42,5 @@ export class ApiService {
         }
 
         return this._http.get<PointsResponse>(`${this._baseUrl}/points`, { params });
-    }
-
-    getLivePoints(): Observable<PlayersMapHistory[]> {
-        return this._http.get<PlayersMapHistory[]>(`${this._baseUrl}/points/live`);
     }
 }
