@@ -18,6 +18,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     private _markerCluster!: L.MarkerClusterGroup;
     private _polylines = new Map<string, L.Polyline>();
     private _markers: L.CircleMarker[] = [];
+    private _hitLayer!: L.LayerGroup;
 
     constructor(private _colorService: PlayerColorService) {
         effect(() => {
@@ -39,9 +40,43 @@ export class MapComponent implements AfterViewInit, OnDestroy {
             maxClusterRadius: 50,
             spiderfyOnMaxZoom: true,
             showCoverageOnHover: false,
-            disableClusteringAtZoom: 5
+            disableClusteringAtZoom: 5,
+            iconCreateFunction: (cluster) => {
+                const childMarkers = cluster.getAllChildMarkers();
+                const colors = new Set<string>();
+                for (const child of childMarkers) {
+                    const playerColor = (child as any).playerColor;
+                    if (playerColor) {
+                        colors.add(playerColor);
+                    }
+                }
+                const color = [...colors][0] ?? "#3388ff";
+                const count = childMarkers.length;
+                const size = count < 10 ? 30 : count < 50 ? 36 : 42;
+
+                return L.divIcon({
+                    html: `<div style="
+                        background-color: ${color};
+                        width: ${size}px;
+                        height: ${size}px;
+                        border-radius: 50%;
+                        border: 2px solid #fff;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: #fff;
+                        font-weight: bold;
+                        font-size: 12px;
+                        box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+                    ">${count}</div>`,
+                    className: "",
+                    iconSize: L.point(size, size)
+                });
+            }
         });
         this._map.addLayer(this._markerCluster);
+
+        this._hitLayer = L.layerGroup().addTo(this._map);
     }
 
     ngOnDestroy(): void {
@@ -50,6 +85,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
     private _renderPoints(points: PlayersMapHistory[], visiblePlayers: Set<string>): void {
         this._markerCluster.clearLayers();
+        this._hitLayer.clearLayers();
         this._markers = [];
         this._polylines.forEach((line) => this._map.removeLayer(line));
         this._polylines.clear();
@@ -84,8 +120,19 @@ export class MapComponent implements AfterViewInit, OnDestroy {
                     color: "#fff",
                     weight: 1,
                     opacity: 1,
-                    fillOpacity: 0.85
+                    fillOpacity: 0.85,
+                    interactive: false
                 });
+
+                (marker as any).playerColor = color;
+
+                const hitMarker = L.circleMarker([lat, lng], {
+                    radius: 12,
+                    fillOpacity: 0,
+                    opacity: 0,
+                    weight: 0
+                });
+                (hitMarker as any).playerColor = color;
 
                 const icon = getStateIcon(point.playerState, point.isAiming);
                 const date = new Date(point.createdAt ?? 0).toLocaleString();
@@ -110,9 +157,10 @@ export class MapComponent implements AfterViewInit, OnDestroy {
                 }
 
                 popupContent += `</div>`;
-                marker.bindPopup(popupContent);
+                hitMarker.bindTooltip(popupContent);
 
                 this._markerCluster.addLayer(marker);
+                this._hitLayer.addLayer(hitMarker);
                 this._markers.push(marker);
             }
 
