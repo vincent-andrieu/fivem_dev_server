@@ -32,3 +32,13 @@ app-sidebar {
 .leaflet-default-icon-path {
     background-image: url("leaflet/dist/images/marker-icon.png");
 }
+
+/* Fix Tailwind v4 preflight overriding Angular Material slider styles */
+.mat-mdc-slider {
+    width: calc(100% - 16px) !important;
+    margin: 0 8px !important;
+}
+
+.mat-mdc-slider .mdc-slider__input {
+    box-sizing: content-box !important;
+}
