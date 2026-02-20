@@ -116,10 +116,29 @@ export class MapComponent implements AfterViewInit, OnDestroy {
 
                 const icon = getStateIcon(point.playerState, point.isAiming);
                 const pointSize = 20;
+                const containerSize = 28;
+                const cssRotation = 360 - point.coords.heading;
                 const marker = L.marker([lat, lng], {
                     interactive: false,
                     icon: L.divIcon({
                         html: `<div style="
+                            width: ${containerSize}px;
+                            height: ${containerSize}px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            transform: rotate(${cssRotation}deg);
+                        "><div style="
+                            position: absolute;
+                            top: 0;
+                            left: 50%;
+                            transform: translateX(-50%);
+                            width: 0;
+                            height: 0;
+                            border-left: 7px solid transparent;
+                            border-right: 7px solid transparent;
+                            border-bottom: 9px solid ${color};
+                        "></div><div style="
                             background-color: ${color};
                             width: ${pointSize}px;
                             height: ${pointSize}px;
@@ -129,10 +148,10 @@ export class MapComponent implements AfterViewInit, OnDestroy {
                             align-items: center;
                             justify-content: center;
                             box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-                        "><span class="material-icons" style="font-size: 12px; color: #fff;">${icon}</span></div>`,
+                        "><span class="material-icons" style="font-size: 12px; color: #fff; transform: rotate(${-cssRotation}deg);">${icon}</span></div></div>`,
                         className: "",
-                        iconSize: L.point(pointSize, pointSize),
-                        iconAnchor: L.point(pointSize / 2, pointSize / 2)
+                        iconSize: L.point(containerSize, containerSize),
+                        iconAnchor: L.point(containerSize / 2, containerSize / 2)
                     })
                 });
 
@@ -151,7 +170,6 @@ export class MapComponent implements AfterViewInit, OnDestroy {
                     <div style="font-size: 13px; min-width: 180px;">
                         <b><span class="material-icons" style="font-size:16px;vertical-align:middle;">${icon}</span> ${point.playerState}</b><br/>
                         <b>Coords:</b> ${point.coords.x.toFixed(1)}, ${point.coords.y.toFixed(1)}, ${point.coords.z.toFixed(1)}<br/>
-                        <b>Heading:</b> ${point.coords.heading.toFixed(1)}<br/>
                         <b>Session:</b> ${point.sessionId}<br/>
                         <b>Date:</b> ${date}
                 `;
