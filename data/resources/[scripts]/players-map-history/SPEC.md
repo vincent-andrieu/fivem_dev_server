@@ -82,7 +82,7 @@ Le **client FiveM** exécute **deux boucles** parallèles pour la collecte de do
 
 **1. Tick rapide (~1s)** — vérifie en continu les déclencheurs de snapshot immédiat (chaque trigger est activable/désactivable via convar) :
 
-- **Déclencheur par distance** (`pmh_trigger_distance`, en mètres ; `<= 0` = désactivé) : snapshot immédiat si le joueur a parcouru plus de X mètres (distance 3D) depuis le dernier snapshot
+- **Déclencheur par distance** (`pmh_trigger_distance`, en mètres ; `<= 0` = désactivé) : snapshot immédiat si le joueur a parcouru plus de X mètres (distance 3D) depuis le dernier snapshot (défaut : 200m)
 - **Déclencheur par changement d'état** (`pmh_trigger_state`, liste d'états séparés par virgule ; `''` = désactivé) : snapshot immédiat quand le joueur passe **vers** l'un des états configurés
 - **Déclencheur par changement de véhicule** (`pmh_trigger_vehicle`, bool) : snapshot immédiat quand le joueur monte, descend ou **change de siège** dans un véhicule
 - **Déclencheur par changement d'arme** (`pmh_trigger_weapon`, bool) : snapshot immédiat quand le joueur sort, range ou change d'arme
@@ -92,7 +92,7 @@ Le **client FiveM** exécute **deux boucles** parallèles pour la collecte de do
 **2. Timer périodique (30s par défaut, min 1s)** (`pmh_default_interval`) :
 
 - Snapshot garanti même si rien n'a changé
-- **Exception** : pas de ré-enregistrement si le joueur est immobile et qu'aucun état n'a changé, **sauf** si ça fait plus de 5 minutes (`pmh_idle_timeout`, configurable)
+- **Exception** : pas de ré-enregistrement si le joueur est immobile et qu'aucun état n'a changé, tant que le temps d'inactivité reste inférieur à `pmh_idle_timeout` (5 min par défaut). Au-delà, le timer continue de tourner mais ne force pas de snapshot supplémentaire
 
 Le **serveur FiveM** n'a pas de timer : il traite les données à réception de l'événement client.
 
@@ -125,12 +125,11 @@ Types d'identifiants disponibles : `steam`, `discord`, `xbl`, `live`, `license`,
 
 **Événements FiveM natifs écoutés :**
 
-| Événement       | Usage                                |
-| --------------- | ------------------------------------ |
-| `playerJoining` | Initialiser le tracking côté serveur |
-| `playerDropped` | Arrêter le tracking, snapshot final  |
+| Événement       | Usage                                                        |
+| --------------- | ------------------------------------------------------------ |
+| `playerDropped` | Nettoyage du cache de résolution joueur (supprime le source) |
 
-`playerConnecting` n'est pas utilisé (source pas encore stable).
+`playerConnecting` et `playerJoining` ne sont pas utilisés — le tracking est initialisé paresseusement au premier snapshot reçu via `resolvePlayerId()`.
 
 ### 3.6. Référence des natives (PascalCase JS/TS)
 
@@ -309,8 +308,9 @@ TriggerServerEvent('players-map-history:snapshot')
 | ------- | -------------- | ------------------------------------------------------------------------- |
 | `GET`   | `/health`      | Health check                                                              |
 | `GET`   | `/points`      | Points d'historique (filtres : player, sessionId, date range, pagination) |
-| `GET`   | `/players`     | Liste des joueurs ayant des points d'historique                           |
 | `GET`   | `/points/live` | Points en cours des joueurs connectés                                     |
+
+La liste des joueurs est dérivée côté client Angular à partir des données de points (pas de route `/players` dédiée).
 
 ### 5.4. WebSocket (live tracking)
 
@@ -369,8 +369,7 @@ TriggerServerEvent('players-map-history:snapshot')
         - `minZoom: 0`
         - `maxZoom: 5`
         - `noWrap: true`
-        - `continuousWorld: false`
-        - `bounds: L.latLngBounds([[-4000, -4000], [8000, 8000]])`
+        - `bounds: L.latLngBounds([[-5000, -6000], [9000, 7000]])`
     - Les tuiles sont incluses dans les assets Angular (`src/assets/tiles/`) et servies directement par le client
 
 - **Initialisation de la carte** :
@@ -378,22 +377,26 @@ TriggerServerEvent('players-map-history:snapshot')
     ```typescript
     const map = L.map("map", {
         crs: CUSTOM_CRS,
-        minZoom: 1,
+        minZoom: 0,
         maxZoom: 5,
         zoom: 3,
         center: [0, 0],
         preferCanvas: true,
-        attributionControl: false
+        attributionControl: false,
+        maxBounds: L.latLngBounds([
+            [-40000, -40000],
+            [40000, 40000]
+        ]),
+        maxBoundsViscosity: 0.1
     });
 
     L.tileLayer("assets/tiles/atlas/{z}/{x}/{y}.jpg", {
         minZoom: 0,
         maxZoom: 5,
         noWrap: true,
-        continuousWorld: false,
         bounds: L.latLngBounds([
-            [-4000, -4000],
-            [8000, 8000]
+            [-5000, -6000],
+            [9000, 7000]
         ])
     }).addTo(map);
     ```
@@ -468,7 +471,7 @@ TriggerServerEvent('players-map-history:snapshot')
 
 **Interaction :**
 
-- **Clic sur un point** → popup Leaflet avec les détails : coords, véhicule (modèle, plaque, siège), arme, état, date. Le skin/clothes est disponible mais discret (détail secondaire)
+- **Survol d'un point** → tooltip Leaflet avec les détails : coords, véhicule (modèle, plaque, siège), arme, état, date. Un `circleMarker` invisible (radius 12, opacité 0) sert de zone de détection pour le hover. Le skin/clothes est disponible mais discret (détail secondaire)
 
 ### 6.3. Interface utilisateur
 
@@ -481,32 +484,32 @@ TriggerServerEvent('players-map-history:snapshot')
 
 1. **Liste des joueurs** : checkboxes pour afficher/masquer individuellement chaque joueur sur la carte. Nom récupéré dynamiquement depuis la collection `players`
 2. **Slider temporel interactif** : barre de timeline avec deux poignées (début/fin) pour ajuster la plage horaire affichée en glissant
-3. **Bouton "Sessions courantes"** : raccourci pour filtrer uniquement les sessions en cours des joueurs connectés (bascule vers le mode live)
+3. **Bouton "Live Sessions"** : raccourci pour activer le mode live et voir les joueurs en temps réel (selon le délai configuré). Affiche "Stop Live" quand le mode live est actif
 4. **Recherche** : champ de recherche pour trouver un joueur par nom ou identifiant
 
 **Mode live :**
 
-- Quand activé (bouton sessions courantes ou manuellement), la carte se met à jour en temps réel via WebSocket
+- Quand activé (bouton "Live Sessions" ou manuellement), la carte se met à jour en temps réel via WebSocket
 - Les nouveaux points apparaissent et les polylines s'étendent au fur et à mesure
 
 ---
 
 ## 7. Configuration
 
-La configuration de la resource FiveM utilise des **convars FiveM** (configurables dans `server.cfg` sans rebuild), mappées dans des fichiers `config.ts` avec des valeurs par défaut. Les ports et `corsOrigin` du serveur web ne sont **pas** des convars — ils sont dans le `.env` du serveur Express.
+La configuration de la resource FiveM utilise des **convars FiveM** (configurables dans `server.cfg` sans rebuild), mappées dans `client/src/config.ts` avec des valeurs par défaut. Les ports et `corsOrigin` du serveur web ne sont **pas** des convars — ils sont dans le `.env` du serveur Express.
 
-Le config est **séparé en deux fichiers** selon le contexte d'exécution, car certains convars ne doivent pas être exposés au client :
+Le serveur FiveM n'a pas de fichier de configuration dédié — il n'utilise pas de convars.
 
 **Client** (`client/src/config.ts`) — utilise des convars **répliquées** (`setr`) :
 
 ```typescript
 export const clientConfig = {
     // Timing
-    defaultInterval: GetConvarInt("pmh_default_interval", 30000), // Timer périodique (ms), min 1000
+    defaultInterval: Math.max(GetConvarInt("pmh_default_interval", 30000), 30000), // Timer périodique (ms), min 30000
     idleTimeout: GetConvarInt("pmh_idle_timeout", 5 * 60 * 1000), // 5 min idle max
 
     // Triggers instantanés
-    triggerDistance: GetConvarInt("pmh_trigger_distance", 50), // Distance 3D en mètres ; <= 0 = désactivé
+    triggerDistance: GetConvarInt("pmh_trigger_distance", 200), // Distance 3D en mètres ; <= 0 = désactivé
     triggerState: parseStateList(GetConvar("pmh_trigger_state", "dead, ragdoll, parachuting, swimming, diving, climbing, falling, vehicle")),
     triggerVehicle: GetConvar("pmh_trigger_vehicle", "true") === "true",
     triggerWeapon: GetConvar("pmh_trigger_weapon", "true") === "true",
@@ -514,29 +517,27 @@ export const clientConfig = {
 };
 
 // Helper pour parser la liste d'états (gère les espaces)
-function parseStateList(value: string): string[] {
+function parseStateList(value: string): PlayerState[] {
     if (!value.trim()) return [];
     return value
         .split(",")
         .map((state) => state.trim())
-        .filter(Boolean);
+        .filter(Boolean) as PlayerState[];
 }
 ```
-
-**Serveur** (`server/src/config.ts`) — utilise des convars **non-répliquées** (`set`) :
 
 Les convars ne sont **pas définies** dans `server.cfg` par défaut (les valeurs par défaut s'appliquent). Elles sont **documentées** dans `server.cfg` via des commentaires :
 
 ```cfg
 # === Players Map History ===
-# -- Convars répliquées (accessibles par le client FiveM) --
-# setr pmh_default_interval 30000       # Intervalle snapshot périodique en ms (min: 1000)
-# setr pmh_idle_timeout 300000          # Timeout idle en ms (défaut: 5 min)
-# setr pmh_trigger_distance 50          # Distance 3D en mètres pour snapshot immédiat (<= 0 = désactivé)
-# setr pmh_trigger_state "dead, ragdoll, parachuting, swimming, diving, climbing, falling, vehicle"  # États déclencheurs ('' = désactivé)
-# setr pmh_trigger_vehicle "true"       # Trigger monter/descendre/changer de siège véhicule
+# -- Convars repliquees (accessibles par le client FiveM) --
+# setr pmh_default_interval 30000       # Intervalle snapshot periodique en ms (min: 30000)
+# setr pmh_idle_timeout 300000          # Timeout idle en ms (defaut: 5 min)
+# setr pmh_trigger_distance 200         # Distance 3D en metres pour snapshot immediat (<= 0 = desactive)
+# setr pmh_trigger_state "dead, ragdoll, parachuting, swimming, diving, climbing, falling, vehicle"  # Etats declencheurs ('' = desactive)
+# setr pmh_trigger_vehicle "true"       # Trigger monter/descendre/changer de siege vehicule
 # setr pmh_trigger_weapon "true"        # Trigger changement d'arme
-# setr pmh_trigger_aiming "true"        # Trigger début/fin de visée
+# setr pmh_trigger_aiming "true"        # Trigger debut/fin de visee
 ```
 
 ---
@@ -561,16 +562,19 @@ data/resources/[scripts]/players-map-history/
 ├── gta5_map.jpg                    # Image de référence
 ├── fxmanifest.lua                  # Manifest de la resource FiveM
 ├── package.json                    # Package de la resource FiveM
+├── tsconfig.json
 ├── server/                         # Côté serveur FiveM (resource)
 │   ├── src/
 │   │   ├── server.ts              # Point d'entrée serveur
-│   │   └── config.ts              # Configuration serveur (convars non-répliquées)
+│   │   └── playerRepository.ts    # Cache de résolution source → player ObjectId
 │   ├── rollup.config.js
 │   └── tsconfig.json
 ├── client/                         # Côté client FiveM (resource)
 │   ├── src/
-│   │   ├── client.ts              # Point d'entrée client
-│   │   └── config.ts              # Configuration client (convars répliquées)
+│   │   ├── client.ts              # Point d'entrée client (deux ticks)
+│   │   ├── config.ts              # Configuration client (convars répliquées)
+│   │   ├── collectors.ts          # Collecte des données (coords, état, véhicule, arme, skin)
+│   │   └── triggers.ts            # Déclencheurs de snapshot immédiat
 │   ├── rollup.config.js
 │   └── tsconfig.json
 ├── build/                          # Build FiveM compilé
@@ -582,7 +586,7 @@ data/resources/[scripts]/players-map-history/
     │   │   ├── main.ts
     │   │   ├── init/               # Express, MongoDB
     │   │   ├── middlewares/        # Logger, (futur) auth
-    │   │   ├── api/                # Routes REST
+    │   │   ├── api/                # Routes REST (health, points)
     │   │   └── websocket/         # WebSocket + Change Streams
     │   ├── package.json
     │   ├── tsconfig.json
@@ -594,12 +598,12 @@ data/resources/[scripts]/players-map-history/
         │   │   ├── map/            # Composant carte Leaflet
         │   │   ├── sidebar/        # Panel latéral (filtres, liste joueurs)
         │   │   └── shared/         # Services, interfaces
-        │   ├── environments/
         │   ├── main.ts
         │   └── index.html
         ├── angular.json
         ├── package.json
         ├── tsconfig.json
+        ├── nginx.conf
         └── Dockerfile
 ```
 
