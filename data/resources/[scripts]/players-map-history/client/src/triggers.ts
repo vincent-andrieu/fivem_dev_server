@@ -2,7 +2,7 @@ import { PlayerState, VehicleData, distance3D } from "@shared/core";
 import { collectPlayerState, collectVehicle, collectWeapon } from "./collectors";
 import { clientConfig } from "./config";
 
-let lastState: PlayerState = PlayerState.ON_FOOT;
+let lastState: PlayerState = PlayerState.FOOT;
 let lastVehicleKey = "";
 let lastWeapon: string | undefined;
 let lastAiming = false;
