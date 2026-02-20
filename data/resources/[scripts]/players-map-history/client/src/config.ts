@@ -11,7 +11,7 @@ function parseStateList(value: string): PlayerState[] {
 }
 
 export const clientConfig = {
-    defaultInterval: Math.max(GetConvarInt("pmh_default_interval", 30000), 30000),
+    defaultInterval: Math.max(GetConvarInt("pmh_default_interval", 30000), 1000),
     idleTimeout: GetConvarInt("pmh_idle_timeout", 5 * 60 * 1000),
 
     triggerDistance: GetConvarInt("pmh_trigger_distance", 200),
